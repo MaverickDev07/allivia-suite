@@ -1,0 +1,117 @@
+<p-table #dt1 [value]="patients" dataKey="id" responsiveLayout="scroll"  styleClass="p-datatable-striped"
+[rows]="8" [showCurrentPageReport]="true" [loading]="loading"
+[paginator]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+[globalFilterFields]="['nombre', 'patients.nombre', 'patients.solicitud']">
+<ng-template pTemplate="caption">
+  <div class="d-flex ai-center jc-between">
+    <h2 class="text-justify px-6 pt-2 tex-style-title">Pacientes</h2>
+      <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" class="p-inputtext p-component input-search"  (input)="dt1.filterGlobal($any($event.target).value, 'contains')"   placeholder="Buscar paciente" />
+      </span>
+  </div>
+</ng-template>
+<ng-template pTemplate="header" class="surface-500">
+  <tr>
+      <th pSortableColumn="nombre">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+              Nombre del Paciente
+          </div>
+      </th>
+        <th pSortableColumn="edad">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+              Edad
+          </div>
+        </th>
+        <th pSortableColumn="fecha">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+            Fecha
+          </div>
+        </th>
+        <th pSortableColumn="solicitud">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+            Solicitud
+          </div>
+        </th>
+        <th pSortableColumn="estado">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+            Estado
+          </div>
+        </th>
+        <th pSortableColumn="edit">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+            Archivos
+          </div>
+        </th>
+    </tr>
+
+</ng-template>
+<ng-template pTemplate="body" let-patients let-expanded="expanded">
+    <tr>
+        <td>
+          <img  [alt]="" src="../../../../assets/avatar/ivanmagalhaes.png" width="30" style="vertical-align: middle" class="border-circle m-2" />
+          <span class="image-text color-data tex-style ">{{patients.nombre}}</span>
+        </td>
+        <td class="tex-style color-data">
+            {{patients.edad}}
+        </td>
+        <td class="tex-style color-data">
+            {{patients.fecha | date:'shortDate'}}
+        </td>
+        <td class="tex-style color-data">
+            {{patients.solicitud}}
+        </td>
+        <td class="tex-style color-data" *ngIf="patients.estado == 'Pendiente'; else procesando">
+          <span class="dot-pendiente"></span>
+          <label for="estado" class="px-2" (click)="confirmEditState(patients.id_laboratorios_paciente )">{{patients.estado}}</label>
+        </td>
+        <ng-template #procesando>
+          <td class="tex-style color-data">
+            <span class="dot-procesando"></span>
+            <label for="estado" class="px-2">{{patients.estado}}</label>
+          </td>
+        </ng-template>
+        <td>
+
+          <button pButton pRipple type="button" class="button-edit text-white btn-block tex-style" label="Subir" (click)="showModalLaboratory(patients.id_laboratorios_paciente)"></button>
+        </td>
+
+    </tr>
+</ng-template>
+<ng-template pTemplate="emptymessage">
+  <tr cl>
+      <td class="p-text-center" colspan="3">Aún no hay laboratorios pendientes.</td>
+  </tr>
+</ng-template>
+</p-table>
+<p-dialog  [(visible)]="window"  [transitionOptions]="'300ms'" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '34vw', height:'38vw'}" [modal]="true" appendTo="body" styleClass="p-fluid">
+    <h2 class="text-center font-bold tex-style">Subir Laboratorio</h2>
+    <form class="formgrid grid justify-content-center mb-8 " [formGroup]="form_register" (ngSubmit)="laboratorySave()">
+      <div class="field col-8">
+        <label for="fecha" class="tex-style">Fecha:</label>
+        <p-calendar inputId="basic"   formControlName="fecha" dateFormat="yy/mm/dd" [minDate]="minimumDate" [showIcon]="true"></p-calendar>
+      </div>
+      <div class="field  col-8">
+        <label class="tex-style" for="file">Adjuntar archivo</label>
+        <p-fileUpload name="file[]"  accept=".pdf,.docx|image/*|media_type" [showUploadButton]='false' (onSelect)="onBeforeSend($event)">
+          <ng-template pTemplate="content" let-file >
+            <div>Arrastra o selecciona el archivo</div>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+      <div class=" field grid col-8 justify-content-center pb-0 mb-0">
+        <button pButton pRipple type="submit" label="Subir Resultados" class="p-button-raised rounded-pill mx-8 tex-style" ></button>
+      </div>
+    </form>
+</p-dialog>
+
+<p-dialog [(visible)]="window_state" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [position]="position" [style]="{width: '5svw'}" [modal]="false" appendTo="body" styleClass="p-fluid">
+  <p class="tex-style">Esta seguro de cambiar el estado de esta solicitud de laboratorio a Procesando?</p>
+  <ng-template pTemplate="footer">
+    <p-button  (click)="window_state=false" label="No"styleClass="p-button-text"></p-button>
+    <p-button  (click)="laboratoryStateUpdate()" label="Si" styleClass="p-button-text"></p-button>
+</ng-template>
+</p-dialog>
+
+
+

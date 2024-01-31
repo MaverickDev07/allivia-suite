@@ -1,0 +1,84 @@
+<p-table #dt2 [value]="patients" dataKey="id" responsiveLayout="scroll"  styleClass="p-datatable-striped"
+[rows]="8" [showCurrentPageReport]="true" [loading]="loading"
+[paginator]="true" currentPageReportTemplate="Mostrando del {first} al {last} de {totalRecords} registros"
+[globalFilterFields]="['nombre', 'patients.nombre', 'patients.solicitud']">
+<ng-template pTemplate="caption">
+  <div class="d-flex ai-center jc-between">
+    <h2 class="text-justify px-6 pt-2 tex-style-title">Pacientes</h2>
+      <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" class="p-inputtext p-component input-search"  (input)="dt2.filterGlobal($any($event.target).value, 'contains')"   placeholder="Buscar paciente" />
+      </span>
+  </div>
+</ng-template>
+<ng-template pTemplate="header" class="surface-500">
+  <tr>
+      <th pSortableColumn="nombre">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+              Nombre del Paciente
+          </div>
+      </th>
+        <th pSortableColumn="edad">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+              Edad
+          </div>
+        </th>
+        <th pSortableColumn="fecha">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+            Fecha
+          </div>
+        </th>
+        <th pSortableColumn="solicitud">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+            Solicitud
+          </div>
+        </th>
+        <th pSortableColumn="estado">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+            Estado
+          </div>
+        </th>
+        <th pSortableColumn="edit">
+          <div class="p-d-flex p-jc-between p-ai-center tex-style">
+            Archivos
+          </div>
+        </th>
+    </tr>
+
+</ng-template>
+<ng-template pTemplate="body" let-patients let-expanded="expanded">
+    <tr>
+        <td>
+          <img  [alt]="" src="../../../../assets/avatar/ivanmagalhaes.png" width="30" style="vertical-align: middle" class="border-circle m-2" />
+          <span class="image-text color-data tex-style">{{patients.nombre}}</span>
+        </td>
+        <td class="tex-style color-data">
+            {{patients.edad}}
+        </td>
+        <td class="tex-style color-data">
+            {{patients.fecha | date:'shortDate'}}
+        </td>
+        <td class="tex-style color-data">
+            {{patients.solicitud}}
+        </td>
+        <td class="tex-style color-data">
+          <span class="dot"></span>
+          <label for="estado" class="px-2">{{patients.estado}}</label>
+        </td>
+        <td>
+          <button pButton pRipple type="button" class="button-edit text-white btn-block tex-style" label="Subido" disabled></button>
+        </td>
+
+    </tr>
+</ng-template>
+<ng-template pTemplate="emptymessage">
+  <tr cl>
+      <td class="p-text-center" colspan="3">Aún no hay laboratorios completados.</td>
+  </tr>
+</ng-template>
+</p-table>
+
+<p-dialog [(visible)]="display" [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [style]="{width: '36vw', height:'30vw'}" header="Detalle del Laboratorio" [modal]="false" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+  </ng-template>
+</p-dialog>

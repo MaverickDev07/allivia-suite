@@ -1,0 +1,72 @@
+.tex-color-table {
+  color: lightgray;
+
+}
+th {
+  background-color:#E3E9EF !important;
+  color: #B3B8BD !important;
+}
+.tex-style-title {
+  font-family: 'Montserrat' !important;
+  font-size: 28px !important;
+
+}
+.tex-style {
+  font-family: 'Montserrat' !important;
+  font-size: 14px !important;
+
+}
+.input-search {
+  border-color: #E3E9EF !important;
+}
+.color-data {
+  color: #52575D !important;
+}
+.button-edit {
+  background-color: #451afd;
+  width: 6rem;
+  height: 2rem;
+}
+.button-edit:hover {
+  background-color: #3f1bdd;
+}
+
+.register-btn {
+  //padding: 13px 20px;
+  background-color: #451afd;
+  border-radius: 0;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 5rem;
+  justify-content: space-between;
+}
+///////////
+.select-state {
+  width: 10rem;
+}
+
+.dot-pendiente {
+  height: 10px;
+  width: 10px;
+  background-color: #E9D44E;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-finalizado {
+  height: 10px;
+  width: 10px;
+  background-color: #00D897;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-cancelado {
+  height: 10px;
+  width: 10px;
+  background-color: #E94E60;
+  border-radius: 50%;
+  display: inline-block;
+}
+

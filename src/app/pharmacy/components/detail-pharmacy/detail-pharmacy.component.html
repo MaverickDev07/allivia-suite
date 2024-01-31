@@ -1,0 +1,143 @@
+<div class="grid">
+    <div class="col-fixed">
+        <div class="mat-sidenav shadow-3">
+
+            <div id="recipe" class="recipe">
+                <span>Receta No. {{medical_record[0].agendacitaId}}</span>
+            </div>
+
+            <div id="doctor" class="doctor">
+                <span>Dr. {{user.nombre}} {{user.apellido}}</span>
+                <p>{{doctor.doctoresespecialidades[0].especialidad.descripcion | lowercase }}</p>
+                <p>Matrícula {{doctor.descripcion}}</p>
+            </div>
+            <div id="diagnosis" class="diagnosis">
+                <span>Diagnóstico</span>
+                <p>{{diagnostic_tab[0].descripcion}}</p>
+            </div>
+            <samp class="mat-divider"></samp>
+
+            <div id="medicines" class="medicines">
+                <span>Medicamentos</span><br>
+                <p *ngFor="let data of medicines">{{data.nombre_medicamento}}</p><br>
+            </div>
+
+            <div id="indications" class="indications">
+                <span>Indicaciones</span>
+                <p>Tomar dos veces al día. Una después del desayuno y otra después de la cena.
+                </p>
+            </div>
+            <div id="signature_date" class="signature_date">
+                <div class="grid">
+                    <div class="col-6 sticky pt-8">
+                        <span>{{details.fecha | date:'shortDate' }}</span><br>
+                        <span>Fecha</span>
+                    </div>
+                    <div class="col-6 pt-6">
+                        <p-image src={{doctor.firma}} alt="Image" width="150"></p-image>Firma</div>
+                </div>
+            </div>
+            <div id="down_card" class="down_card">
+                Allivia Salud S.A. Los Gomeros 111
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="grid pr-8">
+            <div class="col-8 mat-sidenav-data-people shadow-3">
+                <div class="grid">
+                    <div id="patient_data" class="col patient_data">
+                        <span>{{details.paciente.usuario.nombre}} {{details.paciente.usuario.apellido}}</span>
+                        <p>Paciente</p>
+                        <p>Tel. {{details.paciente.usuario.telefono}}</p>
+                        <a href="https://wa.me/591{{details.paciente.usuario.telefono}}" target="_blank">
+                            <span class="pi pi-whatsapp" style="font-size: 1.2rem"></span>
+                        </a>
+                    </div>
+                    <div id="" class="col address_data">
+                        <span>Dirección de envío</span>
+                        <br><span>{{details.detalleenvio.direccion_envio}}</span>
+                    </div>
+                    <div id="" class="col address_data">
+                        <span>Nro de casa / departamento</span>
+                        <br><span>{{details.detalleenvio.numero_casa}}</span>
+                    </div>
+                    <div id="" class="col address_data">
+                        <span>Indicación para la entrega</span>
+                        <br><span>{{details.detalleenvio.indicacion}}</span>
+                    </div>
+                    <div id="" class="col location_button">
+                        <button type="button" class="rounded-pill" label="Ver ubicación" pButton (click)="OpenMap(details.detalleenvio.latitud, details.detalleenvio.longitud)"><i class="pi pi-map-marker"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="content col-12 shadow-3">
+                <div>
+                    <span class="table_header">Orden de compra</span>
+                </div>
+                <p-table [value]="medicamentoElements" [rows]="3" [responsive]="true" [scrollable]="true" scrollHeight="250px" [virtualScroll]="true" [virtualRowHeight]="34" [lazy]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th pSortableColumn="name">ID</th>
+                            <th pSortableColumn="name">Grupo</th>
+                            <th pSortableColumn="name">Medicamento</th>
+                            <th pSortableColumn="name">Dosis</th>
+                            <th pSortableColumn="name">Cantidad Comprimidos</th>
+                            <th pSortableColumn="price">Precio</th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-medicamentoElements>
+                        <tr>
+                            <td>{{medicamentoElements.id}}</td>
+                            <td>{{medicamentoElements.grupo}}</td>
+                            <td>{{medicamentoElements.medicamento}}</td>
+                            <td>{{medicamentoElements.dosis}}</td>
+                            <td>{{medicamentoElements.cantidad}}</td>
+                            <td>{{medicamentoElements.precio}}</td>
+                            <!-- <td>{{medicamentoElements.isDelete}}</td> -->
+                            <td>
+                                <button pButton pRipple type="button" icon="pi pi-check" class="p-button-rounded button-accept" id="{{medicamentoElements.id}}" (click)="total_calculation(medicamentoElements.id, medicamentoElements.grupo, medicamentoElements.medicamento, medicamentoElements.dosis, medicamentoElements.cantidad,medicamentoElements.precio,'add')"></button>
+                                <button pButton pRipple type="button" icon="pi pi-times" class="p-button-rounded p-button-danger p-button-outlined" (click)="total_calculation(medicamentoElements.id, medicamentoElements.grupo, medicamentoElements.medicamento, medicamentoElements.dosis, medicamentoElements.cantidad,medicamentoElements.precio,'lower')"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                <div class="grid">
+                    <div class="col">
+
+                    </div>
+                    <div class="col table_footer_percentage">
+                        <span>-4%</span>
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="col table_footer">
+                        <span>Total</span>
+                    </div>
+                    <div class="col table_footer_calculation">
+                        <span>Bs. {{total |number:'1.2-2'}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8 mat-sidenav-state-show pb-3">
+                <div class="purchase_status">
+                    <span>Estado de compra</span>
+                </div>
+                <div class="grid">
+                    <div class="col-6">
+                        <button pButton pRipple type="button" class="button-state btn-block tex-style shadow-2" label="Finalizado" (click)="SendOrder()"><span class="button-finalizado"></span></button>
+                    </div>
+                    <div class="col-6">
+
+                    </div>
+                    <div class="col-12">
+                        <div class="purchase_status">
+                            <p>Al marcar <span>estado compra a finalizado</span> significa que ya se está despachando la entrega. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
